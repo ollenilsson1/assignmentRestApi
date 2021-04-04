@@ -18,6 +18,80 @@ try {
 }
 
 if (array_key_exists("productid", $_GET)) {
+    $productid = $_GET['productid'];
+    //Validation
+    if ($productid == '' || !is_numeric($productid)) {
+        $response = new Response();
+        $response->setHttpStatusCode(400); //Client error
+        $response->setSuccess(false);
+        $response->addMessage("Product ID cannot be blank or must be numeric");
+        $response->send();
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        try { //Inbyggd SQL funktion som gör deadline till rätt date-format.
+            $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products WHERE product_id = :productid');
+            $query->bindParam(':productid', $productid, PDO::PARAM_INT);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            if ($rowCount === 0) {
+                $response = new Response();
+                $response->setHttpStatusCode(404); //Not found
+                $response->setSuccess(false);
+                $response->addMessage("Product not found");
+                $response->send();
+                exit;
+            }
+
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $product = new product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']); 
+                $productArray[] = $product->returnProductAsArray();
+            }
+
+            $returnData = array();
+            $returnData['rows_returned'] = $rowCount; 
+            $returnData['products'] = $productArray; 
+
+            $response = new Response();
+            $response->setHttpStatusCode(200); // OK
+            $response->setSuccess(true);
+            $response->setData($returnData);
+            $response->send();
+            exit;
+
+        } catch (ProductException $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500); // Server error
+            $response->setSuccess(false);
+            $response->addMessage($ex->getMessage()); 
+            $response->send();
+            exit;
+
+        } catch (PDOException $ex) {
+            error_log("Database query error - " . $ex, 0); // Spara felmeddelandet i PHP logfile
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to get product");
+            $response->send();
+            exit();
+        }
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+
+    } else {
+        $response = new Response();
+        $response->setHttpStatusCode(405);
+        $response->setSuccess(false);
+        $response->addMessage("Request method not allowed");
+        $response->send();
+        exit;
+    }
 
 } elseif (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
