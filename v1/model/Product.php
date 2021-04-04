@@ -14,7 +14,7 @@ class Product
     private $_createdAt;
     private $_updatedAt;
 
-    public function __construct($id, $title, $description, $imgUrl, $price, $quantity, $updatedAt)
+    public function __construct($id, $title, $description, $imgUrl, $price, $quantity, $createdAt, $updatedAt)
     {
         $this->setID($id);
         $this->setTitle($title);
@@ -22,6 +22,7 @@ class Product
         $this->setImgUrl($imgUrl);
         $this->setPrice($price);
         $this->setQuantity($quantity);
+        $this->setCreatedAt($createdAt);
         $this->setUpdatedAt($updatedAt);
 
     }
@@ -120,6 +121,16 @@ class Product
         $this->_quantity = $quantity;
     }
 
+
+    public function setCreatedAt($createdAt)
+    {
+        if (($createdAt !== null) && date_format(date_create_from_format('d/m/Y H:i', $createdAt), 'd/m/Y H:i') != $createdAt) {
+            throw new ProductException("Product created date time error");
+        }
+
+        $this->_createdAt = $createdAt;
+    }
+
     public function setUpdatedAt($updatedAt)
     {
         if (($updatedAt !== null) && date_format(date_create_from_format('d/m/Y H:i', $updatedAt), 'd/m/Y H:i') != $updatedAt) {
@@ -129,8 +140,7 @@ class Product
         $this->_updatedAt = $updatedAt;
     }
 
-    public function returnProductAsArray()
-    {
+    public function returnProductAsArray() {
         $product = array();
         $product['product_id'] = $this->getID();
         $product['title'] = $this->getTitle();
