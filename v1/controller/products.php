@@ -47,13 +47,13 @@ if (array_key_exists("productid", $_GET)) {
             }
 
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $product = new product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']); 
+                $product = new product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']);
                 $productArray[] = $product->returnProductAsArray();
             }
 
             $returnData = array();
-            $returnData['rows_returned'] = $rowCount; 
-            $returnData['products'] = $productArray; 
+            $returnData['rows_returned'] = $rowCount;
+            $returnData['products'] = $productArray;
 
             $response = new Response();
             $response->setHttpStatusCode(200); // OK
@@ -66,7 +66,7 @@ if (array_key_exists("productid", $_GET)) {
             $response = new Response();
             $response->setHttpStatusCode(500); // Server error
             $response->setSuccess(false);
-            $response->addMessage($ex->getMessage()); 
+            $response->addMessage($ex->getMessage());
             $response->send();
             exit;
 
@@ -81,6 +81,36 @@ if (array_key_exists("productid", $_GET)) {
         }
 
     } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        try {
+            $query = $DB->prepare('DELETE FROM products WHERE product_id = :productid');
+            $query->bindParam(':productid', $productid, PDO::PARAM_INT);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            if ($rowCount === 0) {
+                $response = new Response();
+                $response->setHttpStatusCode(404);
+                $response->setSuccess(false);
+                $response->addMessage("Product not found");
+                $response->send();
+                exit;
+            }
+
+            $response = new Response();
+            $response->setHttpStatusCode(200);
+            $response->setSuccess(true);
+            $response->addMessage("Product deleted");
+            $response->send();
+            exit;
+        } catch (PDOEXception $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to delete product");
+            $response->send();
+            exit;
+        }
 
     } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
