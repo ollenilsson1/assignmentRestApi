@@ -289,7 +289,7 @@ if (array_key_exists('sessionid', $_GET)) {
         $username = $jsonData->username;
         $password = $jsonData->password;
 
-        $query = $DB->prepare('SELECT user_id, fullname, username, password, email, role, useractive, loginattempts FROM users WHERE username = :username');
+        $query = $DB->prepare('SELECT user_id, fullname, username, email, password, role, useractive, loginattempts FROM users WHERE username = :username');
         $query->bindParam(':username', $username, PDO::PARAM_STR);
         $query->execute();
 
@@ -310,8 +310,8 @@ if (array_key_exists('sessionid', $_GET)) {
         $returned_userid = $row['user_id'];
         $returned_fullname = $row['fullname'];
         $returned_username = $row['username'];
-        $returned_password = $row['password'];
         $returned_email = $row['email'];
+        $returned_password = $row['password'];
         $returned_role = $row['role'];
         $returned_useractive = $row['useractive'];
         $returned_loginattempts = $row['loginattempts'];
@@ -366,7 +366,6 @@ if (array_key_exists('sessionid', $_GET)) {
     try {
         //Används för att det är två queries, kör allt först när den andra querien fungerar också
         $DB->beginTransaction();
-
         $query = $DB->prepare('UPDATE users set loginattempts = 0 WHERE user_id = :userid');
         $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
         $query->execute();
