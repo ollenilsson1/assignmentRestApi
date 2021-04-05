@@ -140,7 +140,6 @@ if (array_key_exists("productid", $_GET)) {
             $imgUrl_updated = false;
             $price_updated = false;
             $quantity_updated = false;
-    
 
             $queryFields = "";
 
@@ -237,7 +236,6 @@ if (array_key_exists("productid", $_GET)) {
                 $query->bindParam(":quantity", $up_quantity, PDO::PARAM_INT);
             }
 
-
             $query->bindParam(':productid', $productid, PDO::PARAM_INT);
             $query->execute();
 
@@ -309,6 +307,67 @@ if (array_key_exists("productid", $_GET)) {
         $response->addMessage("Request method not allowed");
         $response->send();
         exit;
+    }
+
+} elseif (array_key_exists("keyword", $_GET)) {
+    $keyword_IN = $_GET['keyword'];
+
+    if (strlen($keyword_IN) < 1 || strlen($keyword_IN) > 50) {
+        $response = new Response();
+        $response->setHttpStatusCode(400);
+        $response->setSuccess(false);
+        if (strlen($keyword_IN) < 1 ? $response->addMessage("Search cannot be empty") : false);
+        if (strlen($keyword_IN) > 255 ? $response->addMessage("Search cannot be greater than 50 characters") : false);
+        $response->send();
+        exit;
+    }
+
+    $keyword = '%' . $keyword_IN . '%';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+        try {
+            $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products WHERE title LIKE :keyword_IN OR description LIKE :keyword_IN');
+            $query->bindParam(':keyword_IN', $keyword, PDO::PARAM_STR);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            $productArray = array();
+
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $product = new Product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']);
+                $productArray[] = $product->returnProductAsArray();
+            }
+
+            $returnData = array();
+            $returnData['rows_returned'] = $rowCount;
+            $returnData['products'] = $productArray;
+
+            $response = new Response();
+            $response->setHttpStatusCode(200);
+            $response->setSuccess(true);
+            $response->setData($returnData);
+            $response->send();
+            exit;
+
+        } catch (ProductException $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage($ex->getMessage());
+            $response->send();
+            exit;
+        } catch (PDOEXception $ex) {
+            error_log("Database query error - " . $ex, 0);
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to get products");
+            $response->send();
+            exit;
+        }
+
     }
 
 } elseif (empty($_GET)) {

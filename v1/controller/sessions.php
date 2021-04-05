@@ -393,6 +393,7 @@ if (array_key_exists('sessionid', $_GET)) {
         $response = new Response();
         $response->setHttpStatusCode(201);
         $response->setSuccess(true);
+        $response->addMessage("Log in successful");
         $response->setData($returnData);
         $response->send();
         exit;
