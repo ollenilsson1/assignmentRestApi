@@ -1,21 +1,5 @@
 <?php
 
-require_once '../controller/db.php';
-require_once '../model/Response.php';
-
-try {
-    $DB = DB::connectDB();
-
-} catch (PDOException $ex) {
-    error_log("Connection error - " . $ex, 0); // 0 är för att spara felmeddelandet i PHP logfile
-    $response = new Response();
-    $response->setHttpStatusCode(500);
-    $response->setSuccess(false);
-    $response->addMessage("Database connection error");
-    $response->send();
-    exit();
-}
-
 // Starta authentication scriptet
 if (!isset($_SERVER['HTTP_AUTHORIZATION']) || strlen($_SERVER['HTTP_AUTHORIZATION'] < 1)) {
     $response = new Response();
