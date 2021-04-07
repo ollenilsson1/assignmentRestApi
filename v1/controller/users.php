@@ -52,49 +52,49 @@ if (array_key_exists('user_id', $_GET)) {
             exit;
 
         } else {
-        
-        try {
-            $query = $DB->prepare('SELECT user_id, fullname, username, email, role, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, useractive, loginattempts FROM users');
-            $query->execute();
 
-            $rowCount = $query->rowCount();
+            try {
+                $query = $DB->prepare('SELECT user_id, fullname, username, email, role, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, useractive, loginattempts FROM users');
+                $query->execute();
 
-            $userArray = array();
+                $rowCount = $query->rowCount();
 
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $user = new User($row['user_id'], $row['fullname'], $row['username'], $row['email'], $row['role'], $row['created_at'], $row['useractive'], $row['loginattempts']);
-                $userArray[] = $user->returnUserAsArray();
+                $userArray = array();
+
+                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                    $user = new User($row['user_id'], $row['fullname'], $row['username'], $row['email'], $row['role'], $row['created_at'], $row['useractive'], $row['loginattempts']);
+                    $userArray[] = $user->returnUserAsArray();
+                }
+
+                $returnData = array();
+                $returnData['rows_returned'] = $rowCount;
+                $returnData['users'] = $userArray;
+
+                $response = new Response();
+                $response->setHttpStatusCode(200);
+                $response->setSuccess(true);
+                $response->setData($returnData);
+                $response->send();
+                exit;
+
+            } catch (UserException $ex) {
+                $response = new Response();
+                $response->setHttpStatusCode(500);
+                $response->setSuccess(false);
+                $response->addMessage($ex->getMessage());
+                $response->send();
+                exit;
+            } catch (PDOEXception $ex) {
+                error_log("Database query error - " . $ex, 0);
+                $response = new Response();
+                $response->setHttpStatusCode(500);
+                $response->setSuccess(false);
+                $response->addMessage("Failed to get users");
+                $response->send();
+                exit;
             }
 
-            $returnData = array();
-            $returnData['rows_returned'] = $rowCount;
-            $returnData['users'] = $userArray;
-
-            $response = new Response();
-            $response->setHttpStatusCode(200);
-            $response->setSuccess(true);
-            $response->setData($returnData);
-            $response->send();
-            exit;
-
-        } catch (UserException $ex) {
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage($ex->getMessage());
-            $response->send();
-            exit;
-        } catch (PDOEXception $ex) {
-            error_log("Database query error - " . $ex, 0);
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage("Failed to get users");
-            $response->send();
-            exit;
-        }
-
-    }} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($jsonData->fullname) || !isset($jsonData->username) || !isset($jsonData->password) || !isset($jsonData->email)) {
             $response = new Response();
             $response->setHttpStatusCode(400);
