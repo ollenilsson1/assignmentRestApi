@@ -33,7 +33,7 @@ if (array_key_exists("productid", $_GET)) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
-            //Null första värdet, id sätts av databasen.,
+            //USER ADD PRODUCT TO CART
             $newCart = new Cart(null, $returned_userid, $productid, null, null, null);
 
             $cartUserID = $newCart->getCartUserID();
@@ -164,7 +164,7 @@ if (array_key_exists("productid", $_GET)) {
 
 } elseif (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
+        // USER GET CART
         try { //Inbyggd SQL funktion som gör deadline till rätt date-format.
             $query = $DB->prepare('SELECT c.cart_id, c.cart_user_id, c.cart_product_id, DATE_FORMAT(c.product_added, "%d/%m/%Y %H:%i") as product_added, p.title, p.price FROM carts c INNER JOIN products p ON c.cart_product_id = p.product_id WHERE c.cart_user_id = :userid');
             $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
@@ -215,6 +215,62 @@ if (array_key_exists("productid", $_GET)) {
             exit();
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //USER checkout cart
+        try { //Inbyggd SQL funktion som gör deadline till rätt date-format.
+            $query = $DB->prepare('SELECT c.cart_id, c.cart_user_id, c.cart_product_id, DATE_FORMAT(c.product_added, "%d/%m/%Y %H:%i") as product_added, p.title, p.price, SUM(p.price) AS total FROM carts c INNER JOIN products p ON c.cart_product_id = p.product_id WHERE c.cart_user_id = :userid GROUP BY c.cart_id ASC');
+            $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            if ($rowCount === 0) {
+                $response = new Response();
+                $response->setHttpStatusCode(404); //Not found
+                $response->setSuccess(false);
+                $response->addMessage("Cart not found");
+                $response->send();
+                exit;
+            }
+
+            //Sätter total till 0, lägger till värde i while loop
+            $total = 0;
+
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $cart = new Cart($row['cart_id'], $row['cart_user_id'], $row['cart_product_id'], $row['product_added'], $row['title'], $row['price']);
+                $cartArray[] = $cart->returnCartAsArray();
+                $total += $row['total'];
+            }
+
+            $returnData = array();
+            $returnData['rows_returned'] = $rowCount;
+            $returnData['cart_total_price'] = $total;
+            $returnData['carts'] = $cartArray;
+
+            $response = new Response();
+            $response->setHttpStatusCode(200); // OK
+            $response->setSuccess(true);
+            $response->addMessage("Cart checked out");
+            $response->setData($returnData);
+            $response->send();
+            exit;
+
+        } catch (CartException $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500); // Server error
+            $response->setSuccess(false);
+            $response->addMessage($ex->getMessage());
+            $response->send();
+            exit;
+
+        } catch (PDOException $ex) {
+            error_log("Database query error - " . $ex, 0); // Spara felmeddelandet i PHP logfile
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to checkout cart");
+            $response->send();
+            exit();
+        }
 
     } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         //USER DELETE CART
