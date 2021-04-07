@@ -111,6 +111,39 @@ if (array_key_exists("productid", $_GET)) {
 
         }
 
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        //USER delete product from cart
+        try {
+            $query = $DB->prepare('DELETE FROM carts WHERE cart_product_id = :productid AND cart_user_id = :userid');
+            $query->bindParam(':productid', $productid, PDO::PARAM_INT);
+            $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            if ($rowCount === 0) {
+                $response = new Response();
+                $response->setHttpStatusCode(404);
+                $response->setSuccess(false);
+                $response->addMessage("Product not found in cart");
+                $response->send();
+                exit;
+            }
+
+            $response = new Response();
+            $response->setHttpStatusCode(200);
+            $response->setSuccess(true);
+            $response->addMessage("Product deleted from cart");
+            $response->send();
+            exit;
+        } catch (PDOEXception $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to delete product");
+            $response->send();
+            exit;
+        }
     }
 
 } elseif (array_key_exists("cartid", $_GET)) {
@@ -123,6 +156,10 @@ if (array_key_exists("productid", $_GET)) {
         $response->addMessage("Cart ID cannot be blank or must be numeric");
         $response->send();
         exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     }
 
 } elseif (empty($_GET)) {
@@ -178,5 +215,38 @@ if (array_key_exists("productid", $_GET)) {
             exit();
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        //USER DELETE CART
+        try {
+            $query = $DB->prepare('DELETE FROM carts WHERE cart_user_id = :userid');
+            $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
+            $query->execute();
+
+            $rowCount = $query->rowCount();
+
+            if ($rowCount === 0) {
+                $response = new Response();
+                $response->setHttpStatusCode(404);
+                $response->setSuccess(false);
+                $response->addMessage("No products found in cart");
+                $response->send();
+                exit;
+            }
+
+            $response = new Response();
+            $response->setHttpStatusCode(200);
+            $response->setSuccess(true);
+            $response->addMessage("Cart deleted");
+            $response->send();
+            exit;
+        } catch (PDOEXception $ex) {
+            $response = new Response();
+            $response->setHttpStatusCode(500);
+            $response->setSuccess(false);
+            $response->addMessage("Failed to delete cart");
+            $response->send();
+            exit;
+        }
 
     }}
