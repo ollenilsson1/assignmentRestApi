@@ -119,4 +119,14 @@ class Cart
         return $cart;
     }
 
+    public function returnAddedProductAsArray()
+    {
+        $cart = array();
+        $cart['cart_id'] = $this->getCartID();
+        $cart['cart_user_id'] = $this->getCartUserID();
+        $cart['cart_product_id'] = $this->getCartProductID();
+        $cart['product_added_in_cart'] = $this->getProductAdded();
+        return $cart;
+    }
+
 }
