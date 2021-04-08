@@ -42,6 +42,7 @@ if (array_key_exists('user_id', $_GET)) {
 
 } elseif (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        //GET ALL USERS kräver att man är ADMIN
         require_once '../config/authorization.php';
         if ($returned_role !== 'admin') {
             $response = new Response();

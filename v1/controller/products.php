@@ -19,7 +19,7 @@ try {
 
 if (array_key_exists("productid", $_GET)) {
     $productid = $_GET['productid'];
-    //Validation
+
     if ($productid == '' || !is_numeric($productid)) {
         $response = new Response();
         $response->setHttpStatusCode(400); //Client error
@@ -28,7 +28,7 @@ if (array_key_exists("productid", $_GET)) {
         $response->send();
         exit;
     }
-
+    // GET fungerar för alla users, man behöver inte vara inloggad
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         try { //Inbyggd SQL funktion som gör deadline till rätt date-format.
             $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products WHERE product_id = :productid');
@@ -79,8 +79,8 @@ if (array_key_exists("productid", $_GET)) {
             $response->send();
             exit();
         }
-
     } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        //DELETE fungerar bara som ADMIN
         require_once '../config/authorization.php';
         if ($returned_role !== 'admin') {
             $response = new Response();
@@ -122,8 +122,8 @@ if (array_key_exists("productid", $_GET)) {
                 exit;
             }
         }
-
     } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+        //PATCH fungerar bara som ADMIN
         require_once '../config/authorization.php';
         if ($returned_role !== 'admin') {
             $response = new Response();
@@ -331,70 +331,9 @@ if (array_key_exists("productid", $_GET)) {
         exit;
     }
 
-} elseif (array_key_exists("keyword", $_GET)) {
-    $keyword_IN = $_GET['keyword'];
-
-    if (strlen($keyword_IN) < 1 || strlen($keyword_IN) > 50) {
-        $response = new Response();
-        $response->setHttpStatusCode(400);
-        $response->setSuccess(false);
-        if (strlen($keyword_IN) < 1 ? $response->addMessage("Search cannot be empty") : false);
-        if (strlen($keyword_IN) > 255 ? $response->addMessage("Search cannot be greater than 50 characters") : false);
-        $response->send();
-        exit;
-    }
-
-    $keyword = '%' . $keyword_IN . '%';
-
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
-        try {
-            $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products WHERE title LIKE :keyword_IN OR description LIKE :keyword_IN');
-            $query->bindParam(':keyword_IN', $keyword, PDO::PARAM_STR);
-            $query->execute();
-
-            $rowCount = $query->rowCount();
-
-            $productArray = array();
-
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $product = new Product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']);
-                $productArray[] = $product->returnProductAsArray();
-            }
-
-            $returnData = array();
-            $returnData['rows_returned'] = $rowCount;
-            $returnData['products'] = $productArray;
-
-            $response = new Response();
-            $response->setHttpStatusCode(200);
-            $response->setSuccess(true);
-            $response->setData($returnData);
-            $response->send();
-            exit;
-
-        } catch (ProductException $ex) {
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage($ex->getMessage());
-            $response->send();
-            exit;
-        } catch (PDOEXception $ex) {
-            error_log("Database query error - " . $ex, 0);
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage("Failed to get products");
-            $response->send();
-            exit;
-        }
-
-    }
-
 } elseif (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
+        // GET hämtar alla produkter, fungerar även om man inte är inloggad.
         try {
             $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products');
             $query->execute();
@@ -435,8 +374,8 @@ if (array_key_exists("productid", $_GET)) {
             $response->send();
             exit;
         }
-
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //POST Kräver att man är ADMIN
         require_once '../config/authorization.php';
         if ($returned_role !== 'admin') {
             $response = new Response();
@@ -477,7 +416,7 @@ if (array_key_exists("productid", $_GET)) {
                     $response->setSuccess(false);
                     (!isset($jsonData->title) ? $response->addMessage("Title field is mandatory and must be provided") : false); // if statement för error meddelanden
                     (!isset($jsonData->description) ? $response->addMessage("Description field is mandatory and must be provided") : false);
-                    (!isset($jsonData->imgUrl) ? $response->addMessage("Image Url field is mandatory and must be provided") : false);
+                    (!isset($jsonData->imgUrl) ? $response->addMessage("Image Url field is mandatory and must be provided, use imgUrl:") : false);
                     (!isset($jsonData->price) ? $response->addMessage("Price field is mandatory and must be provided") : false);
                     (!isset($jsonData->quantity) ? $response->addMessage("Quantity field is mandatory and must be provided") : false);
                     $response->send();
