@@ -1,18 +1,4 @@
 <?php
-/* require_once '../config/db.php';
-try {
-$DB = DB::connectDB();
-
-} catch (PDOException $ex) {
-error_log("Connection error - " . $ex, 0); // 0 är för att spara felmeddelandet i PHP logfile
-$response = new Response();
-$response->setHttpStatusCode(500);
-$response->setSuccess(false);
-$response->addMessage("Database connection error");
-$response->send();
-exit();
-}
- */
 class CartException extends Exception
 {}
 
