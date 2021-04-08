@@ -146,22 +146,6 @@ if (array_key_exists("productid", $_GET)) {
         }
     }
 
-} elseif (array_key_exists("cartid", $_GET)) {
-    $cartid = $_GET['cartid'];
-    //Validation
-    if ($cartid == '' || !is_numeric($cartid)) {
-        $response = new Response();
-        $response->setHttpStatusCode(400); //Client error
-        $response->setSuccess(false);
-        $response->addMessage("Cart ID cannot be blank or must be numeric");
-        $response->send();
-        exit;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    }
-
 } elseif (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // USER GET CART
