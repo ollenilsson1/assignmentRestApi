@@ -18,45 +18,48 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 ## USERS
 ### POST - Create user
 >http://localhost/storeapi/v1/controller/users.php
-### ADMIN - Get all users (GET)
+### ADMIN 
+### GET - Get all users
 >http://localhost/storeapi/v1/controller/users.php
 
 ## SESSIONS
-### Log in user (POST)
+### POST - Log in user
 >http://localhost/storeapi/v1/controller/sessions.php
-### Refresh accesstoken (PATCH)
+### PATCH - Refresh accesstoken
 >http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
-### Log out user (DELETE)
+### DELETE - Log out user
 >http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
 ## PRODUCTS
-### Create product (POST)
+### POST - Create product
 >http://localhost/storeapi/v1/controller/products.php
-### Get products (GET)
+### GET - Get products
 >http://localhost/storeapi/v1/controller/products.php?page={pagenumber}</br>
 20 products per page, pagenumber can be 1 or 2 and so on
-### Get single product (GET)
+### GET - Get single product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### ADMIN - Delete product (DELETE)
+### ADMIN 
+### DELETE - Delete product 
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### ADMIN - Update product (PATCH)
+### ADMIN 
+### PATCH - Update product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
 ## CARTS
-### User add product to cart (POST)
+### POST - User add product to cart
 >http://localhost/storeapi/v1/controller/carts.php?productid={productid}</br>
 Need to be a valid productid in URL
-### User delete product from cart (DELETE)
+### DELETE - User delete product from cart
 >http://localhost/storeapi/v1/controller/carts.php?productid={productid}</br>
 Need to be a valid productid in URL
-### User delete cart (DELETE)
+### DELETE - User delete cart 
 >http://localhost/storeapi/v1/controller/carts.php
-### User get cart (GET)
+### GET - User get cart 
 >http://localhost/storeapi/v1/controller/carts.php
-### User checkout cart (POST)
+### POST - User checkout cart
 >http://localhost/storeapi/v1/controller/carts.php
 
 
@@ -110,7 +113,7 @@ Use the accesstoken provided in header: Authorization = accesstoken
     }
 ```
 Use endpoint provided
-[Get all users endpoint](#ADMIN---Get-all-users-(GET))
+[Get all users endpoint](#GET---Get-all-users)
 
 ## SESSIONS
 ### Log in user (POST)
@@ -122,7 +125,7 @@ You need to have Content-Type: application/json in header
     }
 ```
 Use endpoint provided
-[Log in endpoint](#Log-in-user-(POST))
+[Log in endpoint](#POST---Log-in-user)
 
 ### Refresh accesstoken (PATCH)
 You need to have Content-Type: application/json in header<br/>
@@ -133,13 +136,13 @@ Use the accesstoken provided in header: Authorization = accesstoken
     }
 ```
 Use endpoint provided
-[Refresh token endpoint](#Refresh-accesstoken-(PATCH))
+[Refresh token endpoint](#PATCH---Refresh-accesstoken)
 
 ### Log out user (DELETE)
 Use the accesstoken provided in header: Authorization = accesstoken<br/>
 No input needed
 Use endpoint provided
-[Log out user endpoint](#Log-out-user-(DELETE))
+[Log out user endpoint](#DELETE---Log-out-user)
 
 ## PRODUCTS
 ### Create product (POST)
@@ -156,18 +159,18 @@ Use the accesstoken provided in header: Authorization = accesstoken
     }
 ```
 Use endpoint provided
-[Create product endpoint](#Create-product-(POST))
+[Create product endpoint](#POST---Create-product)
 ### Get products (GET)
 Use endpoint provided
-[Get all products endpoint](#Get-products-(GET))
+[Get all products endpoint](#GET---Get-products)
 ### Get single product (GET)
 Use endpoint provided
-[Get single product endpoint](#Get-single-product-(GET))
+[Get single product endpoint](#GET---Get-single-product)
 ### Delete single product (DELETE)
 You need to be logged in and user need to have role = admin in database<br/>
 Use the accesstoken provided in header: Authorization = accesstoken<br/>
 Use endpoint provided
-[Delete product endpoint](#ADMIN---Delete-product-(DELETE))
+[Delete product endpoint](#DELETE---Delete-product)
 ### Update product (PATCH)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in and user need to have role = admin in database<br/>
@@ -182,37 +185,39 @@ You can update all fields or just one field
     "quantity" : 22
     }
 ```
+Use endpoint provided
+[Update product endpoint](#PATCH---Update-product)
 
 ## CARTS
 ### User add product to cart (POST)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in, Use the accesstoken provided in header: Authorization = accesstoken</br>
 Use endpoint provided : 
-[Add to cart endpoint](#User-add-product-to-cart-(POST))
+[Add to cart endpoint](#POST---User-add-product-to-cart)
 
 ### User delete product from cart (DELETE)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in, Use the accesstoken provided in header: Authorization = accesstoken</br>
 Use endpoint provided : 
-[Delete from cart endpoint](#User-delete-product-from-cart-(DELETE))
+[Delete from cart endpoint](#DELETE---User-delete-product-from-cart)
 
 ### User delete cart (DELETE)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in, Use the accesstoken provided in header: Authorization = accesstoken</br>
 Use endpoint provided : 
-[Delete cart endpoint](#User-delete-cart-(DELETE))
+[Delete cart endpoint](#DELETE---User-delete-cart)
 
 ### User get cart (GET)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in, Use the accesstoken provided in header: Authorization = accesstoken</br>
 Use endpoint provided : 
-[Get cart endpoint](#User-get-cart-(GET))
+[Get cart endpoint](#GET---User-get-cart)
 
 ### User checkout cart (POST)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in, Use the accesstoken provided in header: Authorization = accesstoken</br>
 Use endpoint provided : 
-[Checkout cart endpoint](#User-checkout-cart-(POST))
+[Checkout cart endpoint](#POST---User-checkout-cart)
 
 
 
