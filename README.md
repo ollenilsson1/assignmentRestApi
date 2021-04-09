@@ -17,8 +17,8 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 
 ## USERS
 ### POST - Create user
->http://localhost/storeapi/v1/controller/users.php
-### <u>ADMIN</u> 
+>http://localhost/storeapi/v1/controller/users.php 
+### <ins>ADMIN<ins>
 ### GET - Get all users
 >http://localhost/storeapi/v1/controller/users.php
 
