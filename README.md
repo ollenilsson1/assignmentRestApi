@@ -16,7 +16,7 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 
 
 ## USERS
-### Create user POST
+### POST - Create user
 >http://localhost/storeapi/v1/controller/users.php
 ### ADMIN - Get all users (GET)
 >http://localhost/storeapi/v1/controller/users.php
@@ -95,7 +95,7 @@ You need to have Content-Type: application/json in header
     }
 ```
 Use endpoint provided
-[Create user endpoint](#Create-user-POST)
+[Create user endpoint](#POST---Create-user)
 
 ### Get all users (GET)
 You need to have Content-Type: application/json in header<br/>
