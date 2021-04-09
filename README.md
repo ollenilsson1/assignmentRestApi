@@ -32,20 +32,18 @@ Use your session id provided when logged in
 >http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
 ## PRODUCTS
-### <u>ADMIN</u> 
-### POST - Create product
->http://localhost/storeapi/v1/controller/products.php
 ### GET - Get products
 >http://localhost/storeapi/v1/controller/products.php?page={pagenumber}</br>
 20 products per page, pagenumber can be 1 or 2 and so on
 ### GET - Get single product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### <u>ADMIN</u>  
+### <ins>ADMIN</ins> 
+### POST - Create product
+>http://localhost/storeapi/v1/controller/products.php 
 ### DELETE - Delete product 
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### <u>ADMIN</u>  
 ### PATCH - Update product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
@@ -146,6 +144,12 @@ Use endpoint provided
 [Log out user endpoint](#DELETE---Log-out-user)
 
 ## PRODUCTS
+### Get products (GET)
+Use endpoint provided
+[Get all products endpoint](#GET---Get-products)
+### Get single product (GET)
+Use endpoint provided
+[Get single product endpoint](#GET---Get-single-product)
 ### Create product (POST)
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in and user need to have role = admin in database<br/>
@@ -161,12 +165,6 @@ Use the accesstoken provided in header: Authorization = accesstoken
 ```
 Use endpoint provided
 [Create product endpoint](#POST---Create-product)
-### Get products (GET)
-Use endpoint provided
-[Get all products endpoint](#GET---Get-products)
-### Get single product (GET)
-Use endpoint provided
-[Get single product endpoint](#GET---Get-single-product)
 ### Delete single product (DELETE)
 You need to be logged in and user need to have role = admin in database<br/>
 Use the accesstoken provided in header: Authorization = accesstoken<br/>
