@@ -18,7 +18,7 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 ## USERS
 ### POST - Create user
 >http://localhost/storeapi/v1/controller/users.php
-### ADMIN 
+### <u>ADMIN</u> 
 ### GET - Get all users
 >http://localhost/storeapi/v1/controller/users.php
 
@@ -32,6 +32,7 @@ Use your session id provided when logged in
 >http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
 ## PRODUCTS
+### <u>ADMIN</u> 
 ### POST - Create product
 >http://localhost/storeapi/v1/controller/products.php
 ### GET - Get products
@@ -40,11 +41,11 @@ Use your session id provided when logged in
 ### GET - Get single product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### ADMIN 
+### <u>ADMIN</u>  
 ### DELETE - Delete product 
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
-### ADMIN 
+### <u>ADMIN</u>  
 ### PATCH - Update product
 >http://localhost/storeapi/v1/controller/products.php?productid={productid}</br>
 Need to be a valid productid in URL
