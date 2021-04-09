@@ -94,7 +94,7 @@ You need to have Content-Type: application/json in header
     "email" : "olle.nilsson@medieinstitutet.se"
     }
 ```
-User endpoint provided
+Use endpoint provided
 [Create user endpoint](#Create-user-(POST))
 
 ### Get all users (GET)
@@ -109,7 +109,7 @@ Use the accesstoken provided in header: Authorization = accesstoken
     "email" : "olle.nilsson@medieinstitutet.se"
     }
 ```
-User endpoint provided
+Use endpoint provided
 [Get all users endpoint](#ADMIN---Get-all-users-(GET))
 
 ## SESSIONS
