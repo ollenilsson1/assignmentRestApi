@@ -95,7 +95,7 @@ You need to have Content-Type: application/json in header
     }
 ```
 User endpoint provided
-[Create user endpoint](#Create-user-(POST))
+[Create user endpoint](###Create-user-(POST))
 
 ### Get all users (GET)
 You need to have Content-Type: application/json in header<br/>
