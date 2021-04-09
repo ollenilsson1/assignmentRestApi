@@ -14,8 +14,6 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 
 ## Endpoints
 
-<details>
-<summary>Click here to open Endpoints </summary>
 
 ## USERS
 ### Create user (POST)
@@ -62,11 +60,8 @@ Need to be a valid productid in URL
 >http://localhost/storeapi/v1/controller/carts.php
 
 
-
-
 [Back To The Top](#Endpoints)
 
-</details>
 
 ---
 
