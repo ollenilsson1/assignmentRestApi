@@ -71,7 +71,7 @@ Need to be a valid productid in URL
 <details>
 <summary>Click here to open how to use</summary>
 
-> You need these programs for the api to work
+> You need these programs for the API to work
 - Xampp or Mamp - Local database connecion
 - Visual Studio Code or other code editor - To open or edit the code
 - Postman - To send requests
