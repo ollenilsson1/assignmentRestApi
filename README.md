@@ -27,10 +27,10 @@ This is an school assignment in PHP to make an Rest API for a e-commerce website
 ### Log in user (POST)
 >http://localhost/storeapi/v1/controller/sessions.php
 ### Refresh accesstoken (PATCH)
->http://localhost/storeapi/v1/controller/sessions.php?sessionid={your sessionid}</br>
+>http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
 ### Log out user (DELETE)
->http://localhost/storeapi/v1/controller/sessions.php?sessionid={your sessionid}</br>
+>http://localhost/storeapi/v1/controller/sessions.php?sessionid={yoursessionid}</br>
 Use your session id provided when logged in
 ## PRODUCTS
 ### Create product (POST)
