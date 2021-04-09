@@ -92,7 +92,7 @@ if (array_key_exists("productid", $_GET)) {
             $response->setData($returnData);
             $response->send();
             exit;
-        } catch (ProductException $ex) {
+        } catch (CartException $ex) {
             $response = new Response();
             $response->setHttpStatusCode(400);
             $response->setSuccess(false);
@@ -100,7 +100,7 @@ if (array_key_exists("productid", $_GET)) {
             $response->send();
             exit;
 
-        } catch (PDOEXception $ex) {
+        } catch (PDOException $ex) {
             error_log("Database query error" . $ex, 0);
             $response = new Response();
             $response->setHttpStatusCode(500);

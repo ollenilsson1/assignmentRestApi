@@ -38,6 +38,8 @@ if (!$jsonData = json_decode($rawPostData)) {
     exit;
 }
 
+// RADERA USER HÄMTA EN USER?
+
 if (array_key_exists('user_id', $_GET)) {
 
 } elseif (empty($_GET)) {
