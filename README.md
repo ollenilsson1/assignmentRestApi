@@ -103,14 +103,7 @@ Use endpoint provided
 You need to have Content-Type: application/json in header<br/>
 You need to be logged in and user need to have role = admin in database<br/>
 Use the accesstoken provided in header: Authorization = accesstoken
-```html
-    {
-    "username" : "olle1",
-    "fullname" : "Olle Nilsson",
-    "password" : "123",
-    "email" : "olle.nilsson@medieinstitutet.se"
-    }
-```
+
 Use endpoint provided
 [Get all users endpoint](#GET---Get-all-users)
 
