@@ -333,7 +333,7 @@ if (array_key_exists("productid", $_GET)) {
 
 } elseif (array_key_exists("page", $_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        //GET products fungerar för alla, 20 produkter per sida
+        //GET products fungerar för alla
         $page = $_GET['page'];
 
         if ($page == '' || !is_numeric($page)) {
@@ -345,6 +345,7 @@ if (array_key_exists("productid", $_GET)) {
             exit;
         }
 
+        //20 produkter per sida
         $limitPerPage = 20;
 
         try {
