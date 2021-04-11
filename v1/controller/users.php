@@ -72,6 +72,7 @@ if (empty($_GET)) {
             }
 
         }} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //CREATE USER
         if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
             $response = new Response();
             $response->setHttpStatusCode(400);

@@ -41,6 +41,7 @@ if (array_key_exists('sessionid', $_GET)) {
     $accesstoken = $_SERVER['HTTP_AUTHORIZATION'];
 
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        //Log Out USER
         try {
             $query = $DB->prepare('DELETE FROM sessions WHERE session_id = :sessionid AND accesstoken = :accesstoken');
             $query->bindParam(':sessionid', $sessionid, PDO::PARAM_INT);
@@ -79,6 +80,7 @@ if (array_key_exists('sessionid', $_GET)) {
         }
 
     } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+        //update accesstoken with refreshtoken
         if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
             $response = new Response();
             $response->setHttpStatusCode(400);
@@ -231,6 +233,7 @@ if (array_key_exists('sessionid', $_GET)) {
     }
 
 } elseif (empty($_GET)) {
+    //Log In USER
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         $response = new Response();
         $response->setHttpStatusCode(405);
