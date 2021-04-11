@@ -393,7 +393,7 @@ if (array_key_exists("productid", $_GET)) {
             $returnData['total_rows'] = $productsCount;
             $returnData['total_pages'] = $numOfPages;
             ($page < $numOfPages ? $returnData['has_next_page'] = true : $returnData['has_next_page'] = false);
-            ($page > 1 ? $returnData['has_previous_page'] = true : $returnData['has_next_page'] = false);
+            ($page > 1 ? $returnData['has_previous_page'] = true : $returnData['has_previous_page'] = false);
             $returnData['products'] = $productArray;
 
             $response = new Response();
