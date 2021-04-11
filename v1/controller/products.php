@@ -333,7 +333,7 @@ if (array_key_exists("productid", $_GET)) {
 
 } elseif (array_key_exists("page", $_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        //GET products fungerar för alla, 20 produkter per sida
+        //GET products fungerar för alla
         $page = $_GET['page'];
 
         if ($page == '' || !is_numeric($page)) {
@@ -345,7 +345,8 @@ if (array_key_exists("productid", $_GET)) {
             exit;
         }
 
-        $limitPerPage = 20;
+        //6 produkter per sida, ska egentligen vara högre men för att visa att det fungerar
+        $limitPerPage = 6;
 
         try {
 
@@ -427,49 +428,7 @@ if (array_key_exists("productid", $_GET)) {
         exit;
     }
 } elseif (empty($_GET)) {
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        // GET hämtar alla produkter, fungerar även om man inte är inloggad.
-        try {
-            $query = $DB->prepare('SELECT product_id, title, description, imgUrl, price, quantity, DATE_FORMAT(created_at, "%d/%m/%Y %H:%i") as created_at, DATE_FORMAT(updated_at, "%d/%m/%Y %H:%i") as updated_at FROM products');
-            $query->execute();
-
-            $rowCount = $query->rowCount();
-
-            $productArray = array();
-
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $product = new product($row['product_id'], $row['title'], $row['description'], $row['imgUrl'], $row['price'], $row['quantity'], $row['created_at'], $row['updated_at']);
-                $productArray[] = $product->returnProductAsArray();
-            }
-
-            $returnData = array();
-            $returnData['rows_returned'] = $rowCount;
-            $returnData['products'] = $productArray;
-
-            $response = new Response();
-            $response->setHttpStatusCode(200);
-            $response->setSuccess(true);
-            $response->setData($returnData);
-            $response->send();
-            exit;
-
-        } catch (ProductException $ex) {
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage($ex->getMessage());
-            $response->send();
-            exit;
-        } catch (PDOEXception $ex) {
-            error_log("Database query error - " . $ex, 0);
-            $response = new Response();
-            $response->setHttpStatusCode(500);
-            $response->setSuccess(false);
-            $response->addMessage("Failed to get products");
-            $response->send();
-            exit;
-        }
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //POST Kräver att man är ADMIN
         require_once '../config/authorization.php';
         if ($returned_role !== 'admin') {

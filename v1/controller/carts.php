@@ -160,7 +160,7 @@ if (array_key_exists("productid", $_GET)) {
                 $response = new Response();
                 $response->setHttpStatusCode(404); //Not found
                 $response->setSuccess(false);
-                $response->addMessage("Cart not found");
+                $response->addMessage("No products in cart");
                 $response->send();
                 exit;
             }
@@ -211,7 +211,7 @@ if (array_key_exists("productid", $_GET)) {
                 $response = new Response();
                 $response->setHttpStatusCode(404); //Not found
                 $response->setSuccess(false);
-                $response->addMessage("Cart not found");
+                $response->addMessage("No products in cart");
                 $response->send();
                 exit;
             }
@@ -236,6 +236,23 @@ if (array_key_exists("productid", $_GET)) {
             $response->addMessage("Cart checked out");
             $response->setData($returnData);
             $response->send();
+
+            //IF cart checked out- Delete cart
+            if ($returnData = true) {
+                try {
+                    $query = $DB->prepare('DELETE FROM carts WHERE cart_user_id = :userid');
+                    $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
+                    $query->execute();
+
+                } catch (PDOException $error) {
+                    $response = new Response();
+                    $response->setHttpStatusCode(500);
+                    $response->setSuccess(false);
+                    $response->addMessage("Failed to delete cart after checkout");
+                    $response->send();
+                    exit;
+                }
+            }
             exit;
 
         } catch (CartException $ex) {

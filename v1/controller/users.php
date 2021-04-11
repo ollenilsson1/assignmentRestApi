@@ -16,33 +16,7 @@ try {
     exit;
 }
 
-if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
-    $response = new Response();
-    $response->setHttpStatusCode(400);
-    $response->setSuccess(false);
-    $response->addMessage("Content Type header not set to JSON");
-    $response->send();
-    exit;
-}
-
-//Hämtar input som raw JSON data
-$rawPostData = file_get_contents('php://input');
-
-//Returnerar false om json_decode inte kan köras(det är inte JSON då), annars lagras decodad json i $jsonData
-if (!$jsonData = json_decode($rawPostData)) {
-    $response = new Response();
-    $response->setHttpStatusCode(400);
-    $response->setSuccess(false);
-    $response->addMessage("Request body is not valid JSON");
-    $response->send();
-    exit;
-}
-
-// RADERA USER HÄMTA EN USER?
-
-if (array_key_exists('user_id', $_GET)) {
-
-} elseif (empty($_GET)) {
+if (empty($_GET)) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         //GET ALL USERS kräver att man är ADMIN
         require_once '../config/authorization.php';
@@ -98,6 +72,28 @@ if (array_key_exists('user_id', $_GET)) {
             }
 
         }} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['CONTENT_TYPE'] !== 'application/json') {
+            $response = new Response();
+            $response->setHttpStatusCode(400);
+            $response->setSuccess(false);
+            $response->addMessage("Content Type header not set to JSON");
+            $response->send();
+            exit;
+        }
+
+        //Hämtar input som raw JSON data
+        $rawPostData = file_get_contents('php://input');
+
+        //Returnerar false om json_decode inte kan köras(det är inte JSON då), annars lagras decodad json i $jsonData
+        if (!$jsonData = json_decode($rawPostData)) {
+            $response = new Response();
+            $response->setHttpStatusCode(400);
+            $response->setSuccess(false);
+            $response->addMessage("Request body is not valid JSON");
+            $response->send();
+            exit;
+        }
+
         if (!isset($jsonData->fullname) || !isset($jsonData->username) || !isset($jsonData->password) || !isset($jsonData->email)) {
             $response = new Response();
             $response->setHttpStatusCode(400);

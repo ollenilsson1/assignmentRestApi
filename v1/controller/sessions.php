@@ -172,8 +172,8 @@ if (array_key_exists('sessionid', $_GET)) {
             $accesstoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
             $refreshtoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
 
-            $access_token_expiry_seconds = 1200;
-            $refresh_token_expiry_seconds = 1209600;
+            $access_token_expiry_seconds = 3600; //1 timme
+            $refresh_token_expiry_seconds = 1209600; //14 dagar
 
             $query = $DB->prepare('UPDATE sessions SET accesstoken = :accesstoken, accesstokenexpiry = date_add(NOW(), INTERVAL :accesstokenexpiryseconds SECOND), refreshtoken = :refreshtoken, refreshtokenexpiry = date_add(NOW(), INTERVAL :refreshtokenexpiryseconds SECOND) WHERE session_id = :sessionid AND session_user_id = :userid AND accesstoken =:returnedaccesstoken AND refreshtoken = :returnedrefreshtoken');
             $query->bindParam(':userid', $returned_userid, PDO::PARAM_INT);
@@ -351,7 +351,7 @@ if (array_key_exists('sessionid', $_GET)) {
         $accesstoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
         $refreshtoken = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
 
-        $access_token_expiry_seconds = 1200; //20 minuter
+        $access_token_expiry_seconds = 3600; //1 timme
         $refresh_token_expiry_seconds = 1209600; //14 dagar
 
     } catch (PDOException $ex) {
