@@ -237,6 +237,7 @@ if (array_key_exists("productid", $_GET)) {
             $response->setData($returnData);
             $response->send();
 
+            //IF cart checked out- Delete cart
             if ($returnData = true) {
                 try {
                     $query = $DB->prepare('DELETE FROM carts WHERE cart_user_id = :userid');

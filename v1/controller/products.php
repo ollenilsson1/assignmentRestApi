@@ -345,8 +345,8 @@ if (array_key_exists("productid", $_GET)) {
             exit;
         }
 
-        //20 produkter per sida
-        $limitPerPage = 20;
+        //6 produkter per sida, ska egentligen vara högre men för att visa att det fungerar
+        $limitPerPage = 6;
 
         try {
 
